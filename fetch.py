@@ -2,9 +2,14 @@ import instaloader
 import json
 from datetime import datetime
 import os
+import shutil
 
-# Session file in repo root (GitHub Actions will have it checked out)
+# Session file in repo root
 SESSION_FILE = "session-bat.8797744"
+
+# Instaloader's expected session directory
+INSTA_SESSION_DIR = "/tmp/.instaloader-runner"
+INSTA_SESSION_FILE = os.path.join(INSTA_SESSION_DIR, "session-session-bat.8797744")
 
 # List of Instagram accounts to fetch
 ACCOUNTS = [
@@ -27,16 +32,21 @@ ACCOUNTS = [
     "kvirkultura"
 ]
 
-# Check if session file exists
+# Check if session file exists in repo root
 if not os.path.exists(SESSION_FILE):
     print(f"Error: Session file '{SESSION_FILE}' not found!")
     exit(1)
 
+# Create instaloader session directory and copy session file there
+os.makedirs(INSTA_SESSION_DIR, exist_ok=True)
+shutil.copy(SESSION_FILE, INSTA_SESSION_FILE)
+print(f"Copied session file to {INSTA_SESSION_FILE}")
+
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Load session from file in repo root
-L.load_session_from_file(SESSION_FILE)
+# Load session from the expected location
+L.load_session_from_file(INSTA_SESSION_FILE)
 
 # Dictionary to store posts
 all_posts = {}
