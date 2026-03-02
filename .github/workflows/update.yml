@@ -7,25 +7,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1️⃣ Check out your repo
+      # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Copy the session file into a place Instaloader can find it
-      - name: Copy session file
-        run: cp session-bat.8797744 $HOME/
-
-      # 3️⃣ Set up Python
+      # 2️⃣ Install Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      # 4️⃣ Install requirements
-      - name: Install Python packages
+      # 3️⃣ Install Instaloader
+      - name: Install dependencies
         run: pip install instaloader
 
-      # 5️⃣ Run your fetch.py using the session file
+      # 4️⃣ Run fetch.py
       - name: Fetch Instagram posts
         run: python fetch.py
-        env:
-          SESSION_PATH: $HOME/session-bat.8797744
