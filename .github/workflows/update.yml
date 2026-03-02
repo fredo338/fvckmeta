@@ -10,16 +10,20 @@ jobs:
       # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Install Python
+      # 2️⃣ Copy session file to Instaloader folder
+      - name: Copy session file
+        run: cp session-bat.8797744 /tmp/.instaloader-runner/session-bat.8797744
+
+      # 3️⃣ Set up Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      # 3️⃣ Install Instaloader
-      - name: Install dependencies
+      # 4️⃣ Install Instaloader
+      - name: Install Instaloader
         run: pip install instaloader
 
-      # 4️⃣ Run fetch.py
+      # 5️⃣ Run fetch.py
       - name: Fetch Instagram posts
         run: python fetch.py
