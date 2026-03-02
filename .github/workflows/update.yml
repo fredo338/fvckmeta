@@ -10,16 +10,21 @@ jobs:
       # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Setup Python
+      # 2️⃣ Copy session file to root
+      - name: Copy session file to root
+        run: |
+          cp session-bat.8797744 $GITHUB_WORKSPACE/session-bat.8797744
+
+      # 3️⃣ Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      # 3️⃣ Install Instaloader
+      # 4️⃣ Install Instaloader
       - name: Install Instaloader
         run: pip install instaloader
 
-      # 4️⃣ Run fetch.py
+      # 5️⃣ Run fetch.py
       - name: Fetch Instagram posts
         run: python fetch.py
