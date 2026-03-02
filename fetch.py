@@ -7,8 +7,9 @@ import shutil
 # Session file in repo root
 SESSION_FILE = "session-bat.8797744"
 
-# Instaloader's expected session directory
+# Instaloader's expected session directory and naming
 INSTA_SESSION_DIR = "/tmp/.instaloader-runner"
+INSTA_SESSION_NAME = "session-bat.8797744"  # This is what instaloader will add "session-" prefix to
 
 # List of Instagram accounts to fetch
 ACCOUNTS = [
@@ -36,16 +37,19 @@ if not os.path.exists(SESSION_FILE):
     print(f"Error: Session file '{SESSION_FILE}' not found!")
     exit(1)
 
-# Create instaloader session directory and copy session file there
+# Create instaloader session directory
 os.makedirs(INSTA_SESSION_DIR, exist_ok=True)
-shutil.copy(SESSION_FILE, os.path.join(INSTA_SESSION_DIR, SESSION_FILE))
-print(f"Copied session file to {INSTA_SESSION_DIR}/{SESSION_FILE}")
+
+# Copy session file with the expected naming (session-bat.8797744)
+destination = os.path.join(INSTA_SESSION_DIR, f"session-{INSTA_SESSION_NAME}")
+shutil.copy(SESSION_FILE, destination)
+print(f"Copied session file to {destination}")
 
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Load session - instaloader handles the naming automatically
-L.load_session_from_file(SESSION_FILE)
+# Load session - pass just the base name without "session-" prefix
+L.load_session_from_file(INSTA_SESSION_NAME)
 
 # Dictionary to store posts
 all_posts = {}
