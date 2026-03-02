@@ -10,10 +10,14 @@ jobs:
       # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Copy session file to root
-      - name: Copy session file to root
+      # 2️⃣ Check if session file exists, and if not, copy it
+      - name: Ensure session file is in the root
         run: |
-          cp session-bat.8797744 $GITHUB_WORKSPACE/session-bat.8797744
+          if [ ! -f "$GITHUB_WORKSPACE/session-bat.8797744" ]; then
+            cp session-bat.8797744 $GITHUB_WORKSPACE/session-bat.8797744
+          else
+            echo "Session file already exists in the root."
+          fi
 
       # 3️⃣ Setup Python
       - name: Setup Python
