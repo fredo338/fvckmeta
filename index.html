@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Private News Feed</title>
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: auto; }
+    img { width: 100%; border-radius: 8px; }
+    .post { margin-bottom: 40px; }
+    #feed { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <h2>Enter Password</h2>
+  <input type="password" id="passwordInput">
+  <button onclick="checkPassword()">Enter</button>
+</div>
+
+<div id="feed">
+  <h1>Local News Only</h1>
+  <div id="posts"></div>
+</div>
+
+<script>
+const correctPassword = "161";
+
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  if (input === correctPassword) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("feed").style.display = "block";
+    loadPosts();
+  } else {
+    alert("Wrong password");
+  }
+}
+
+function loadPosts() {
+  fetch("posts.json")
+    .then(res => res.json())
+    .then(data => {
+      const postsDiv = document.getElementById("posts");
+      postsDiv.innerHTML = "";
+      data.sort((a,b)=> new Date(b.date) - new Date(a.date));
+      data.forEach(post => {
+        postsDiv.innerHTML += `
+          <div class="post">
+            <h4>@${post.account}</h4>
+            <img src="${post.image_url}">
+            <p>${post.caption || ""}</p>
+            <small>${post.date}</small>
+          </div>
+        `;
+      });
+      postsDiv.innerHTML += "<p><b>You're caught up.</b></p>";
+    });
+}
+</script>
+
+</body>
+</html>
