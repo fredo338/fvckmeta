@@ -9,7 +9,6 @@ SESSION_FILE = "session-bat.8797744"
 
 # Instaloader's expected session directory
 INSTA_SESSION_DIR = "/tmp/.instaloader-runner"
-INSTA_SESSION_FILE = os.path.join(INSTA_SESSION_DIR, "session-session-bat.8797744")
 
 # List of Instagram accounts to fetch
 ACCOUNTS = [
@@ -39,14 +38,14 @@ if not os.path.exists(SESSION_FILE):
 
 # Create instaloader session directory and copy session file there
 os.makedirs(INSTA_SESSION_DIR, exist_ok=True)
-shutil.copy(SESSION_FILE, INSTA_SESSION_FILE)
-print(f"Copied session file to {INSTA_SESSION_FILE}")
+shutil.copy(SESSION_FILE, os.path.join(INSTA_SESSION_DIR, SESSION_FILE))
+print(f"Copied session file to {INSTA_SESSION_DIR}/{SESSION_FILE}")
 
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Load session from the expected location
-L.load_session_from_file(INSTA_SESSION_FILE)
+# Load session - instaloader handles the naming automatically
+L.load_session_from_file(SESSION_FILE)
 
 # Dictionary to store posts
 all_posts = {}
