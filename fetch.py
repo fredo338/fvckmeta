@@ -3,13 +3,14 @@ import json
 from datetime import datetime
 import os
 import shutil
+import time
 
 # Session file in repo root
 SESSION_FILE = "session-bat.8797744"
 
 # Instaloader's expected session directory and naming
 INSTA_SESSION_DIR = "/tmp/.instaloader-runner"
-INSTA_SESSION_NAME = "session-bat.8797744"  # This is what instaloader will add "session-" prefix to
+INSTA_SESSION_NAME = "session-bat.8797744"
 
 # List of Instagram accounts to fetch
 ACCOUNTS = [
@@ -57,6 +58,7 @@ all_posts = {}
 # Fetch latest 3 posts per account
 for account in ACCOUNTS:
     try:
+        print(f"Fetching {account}...")
         profile = instaloader.Profile.from_username(L.context, account)
         posts_data = []
         count = 0
@@ -71,6 +73,7 @@ for account in ACCOUNTS:
             if count >= 3:
                 break
         all_posts[account] = posts_data
+        time.sleep(5)  # Wait 5 seconds between accounts
     except Exception as e:
         all_posts[account] = {"error": str(e)}
 
