@@ -10,25 +10,25 @@ jobs:
       # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      # 2️⃣ Check if session file exists, and if not, copy it
-      - name: Ensure session file is in the root
-        run: |
-          if [ ! -f "$GITHUB_WORKSPACE/session-bat.8797744" ]; then
-            cp session-bat.8797744 $GITHUB_WORKSPACE/session-bat.8797744
-          else
-            echo "Session file already exists in the root."
-          fi
-
-      # 3️⃣ Setup Python
+      # 2️⃣ Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
-      # 4️⃣ Install Instaloader
+      # 3️⃣ Install Instaloader
       - name: Install Instaloader
         run: pip install instaloader
 
-      # 5️⃣ Run fetch.py
+      # 4️⃣ Run fetch.py
       - name: Fetch Instagram posts
         run: python fetch.py
+
+      # 5️⃣ Commit and push changes
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add posts.json
+          git commit -m "Update posts - $(date +%Y-%m-%d)" || true
+          git push
