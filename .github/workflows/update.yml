@@ -1,32 +1,31 @@
 name: Update Posts
 
 on:
-  schedule:
-    - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
+      # 1️⃣ Check out your repo
       - uses: actions/checkout@v3
 
-      - name: Set up Python
+      # 2️⃣ Copy the session file into a place Instaloader can find it
+      - name: Copy session file
+        run: cp session-bat.8797744 $HOME/
+
+      # 3️⃣ Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: 3.14
 
-      - name: Install dependencies
+      # 4️⃣ Install requirements
+      - name: Install Python packages
         run: pip install instaloader
 
-      - name: Run script
+      # 5️⃣ Run your fetch.py using the session file
+      - name: Fetch Instagram posts
         run: python fetch.py
-
-      - name: Commit changes
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add posts.json
-          git commit -m "Update posts" || echo "No changes"
-          git push
+        env:
+          SESSION_PATH: $HOME/session-bat.8797744
