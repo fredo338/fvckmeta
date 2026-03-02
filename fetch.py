@@ -2,8 +2,8 @@ import instaloader
 import json
 from datetime import datetime
 
-# Session file in repo root
-SESSION_FILE = "session-bat.8797744"
+# Full path to session file (must match workflow copy)
+SESSION_FILE = "/tmp/.instaloader-runner/session-bat.8797744"
 
 # List of Instagram accounts
 ACCOUNTS = [
@@ -29,7 +29,7 @@ ACCOUNTS = [
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Load session from file
+# Load session
 L.load_session_from_file(SESSION_FILE)
 
 # Dictionary to store posts
