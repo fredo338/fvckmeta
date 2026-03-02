@@ -1,6 +1,11 @@
 import instaloader
 import json
 
+# 🔐 LOGIN INFO (throwaway account)
+USERNAME = "bat.8797744"
+PASSWORD = "FvkMeta33"
+
+# 📌 Accounts you want to include
 ACCOUNTS = [
     "trazim_dom_prodaja",
     "zagrebpride",
@@ -21,26 +26,48 @@ ACCOUNTS = [
     "kvirkultura"
 ]
 
-L = instaloader.Instaloader()
+MAX_POSTS_PER_ACCOUNT = 3
+MAX_TOTAL_POSTS = 60  # keeps file small & safe
+
+L = instaloader.Instaloader(
+    download_pictures=False,
+    download_videos=False,
+    download_comments=False,
+    save_metadata=False
+)
+
+# 🔐 Login
+L.login(USERNAME, PASSWORD)
 
 posts_data = []
 
 for username in ACCOUNTS:
-    profile = instaloader.Profile.from_username(L.context, username)
+    try:
+        profile = instaloader.Profile.from_username(L.context, username)
 
-    count = 0
-    for post in profile.get_posts():
-        posts_data.append({
-            "account": username,
-            "caption": post.caption,
-            "image_url": post.url,
-            "date": str(post.date)
-        })
-        count += 1
-        if count >= 3:
-            break
+        count = 0
+        for post in profile.get_posts():
+            posts_data.append({
+                "account": username,
+                "caption": post.caption,
+                "image_url": post.url,
+                "date": str(post.date)
+            })
+
+            count += 1
+            if count >= MAX_POSTS_PER_ACCOUNT:
+                break
+
+    except Exception as e:
+        print(f"Error with {username}: {e}")
+
+# Sort newest first
+posts_data.sort(key=lambda x: x["date"], reverse=True)
+
+# Limit total posts
+posts_data = posts_data[:MAX_TOTAL_POSTS]
 
 with open("posts.json", "w") as f:
     json.dump(posts_data, f)
 
-print("Finished.")
+print("Finished successfully.")
