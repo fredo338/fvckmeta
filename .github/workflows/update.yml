@@ -7,20 +7,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1️⃣ Check out repo
       - uses: actions/checkout@v3
 
-      - name: Copy session file
-        run: |
-          mkdir -p /tmp/.instaloader-runner
-          cp session-bat.8797744 /tmp/.instaloader-runner/session-bat.8797744
-
+      # 2️⃣ Setup Python
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.14
 
+      # 3️⃣ Install Instaloader
       - name: Install Instaloader
         run: pip install instaloader
 
+      # 4️⃣ Run fetch.py
       - name: Fetch Instagram posts
         run: python fetch.py
