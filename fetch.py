@@ -1,10 +1,9 @@
 import instaloader
 import json
-import os
 from datetime import datetime
 
-# Correctly constructing the path for the session file
-SESSION_FILE = os.path.join(os.getenv('RUNNER_TEMP', '/tmp'), '.instaloader-runner', 'session-bat.8797744')
+# Direct path for the session file in GitHub Actions
+SESSION_FILE = '/tmp/.instaloader-runner/session-bat.8797744'
 
 # List of Instagram accounts to fetch
 ACCOUNTS = [
@@ -30,7 +29,7 @@ ACCOUNTS = [
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Load session from the file
+# Load session from the correct file path
 L.load_session_from_file(SESSION_FILE)
 
 # Dictionary to store posts
