@@ -1,11 +1,9 @@
 import instaloader
 import json
 
-# 🔐 LOGIN INFO (throwaway account)
 USERNAME = "bat.8797744"
 PASSWORD = "FvkMeta33"
 
-# 📌 Accounts you want to include
 ACCOUNTS = [
     "trazim_dom_prodaja",
     "zagrebpride",
@@ -36,7 +34,6 @@ L = instaloader.Instaloader(
     save_metadata=False
 )
 
-# 🔐 Login
 L.login(USERNAME, PASSWORD)
 
 posts_data = []
