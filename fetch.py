@@ -1,9 +1,8 @@
 import instaloader
 import json
+from datetime import datetime
 
-USERNAME = "bat.8797744"
-PASSWORD = "FvkMeta33"
-
+# List of Instagram accounts to fetch
 ACCOUNTS = [
     "trazim_dom_prodaja",
     "zagrebpride",
@@ -24,47 +23,35 @@ ACCOUNTS = [
     "kvirkultura"
 ]
 
-MAX_POSTS_PER_ACCOUNT = 3
-MAX_TOTAL_POSTS = 60  # keeps file small & safe
+# Initialize Instaloader and load saved session
+L = instaloader.Instaloader()
+L.load_session_from_file("bat.8797744")  # MUST match your session file name
 
-L = instaloader.Instaloader(
-    download_pictures=False,
-    download_videos=False,
-    download_comments=False,
-    save_metadata=False
-)
+# Dictionary to store posts
+all_posts = {}
 
-L.login(USERNAME, PASSWORD)
-
-posts_data = []
-
-for username in ACCOUNTS:
+# Fetch posts
+for account in ACCOUNTS:
     try:
-        profile = instaloader.Profile.from_username(L.context, username)
-
+        profile = instaloader.Profile.from_username(L.context, account)
+        posts_data = []
         count = 0
         for post in profile.get_posts():
             posts_data.append({
-                "account": username,
+                "shortcode": post.shortcode,
                 "caption": post.caption,
-                "image_url": post.url,
-                "date": str(post.date)
+                "url": f"https://www.instagram.com/p/{post.shortcode}/",
+                "date": post.date.strftime("%Y-%m-%d %H:%M:%S")
             })
-
             count += 1
-            if count >= MAX_POSTS_PER_ACCOUNT:
+            if count >= 3:  # Only latest 3 posts
                 break
-
+        all_posts[account] = posts_data
     except Exception as e:
-        print(f"Error with {username}: {e}")
+        all_posts[account] = {"error": str(e)}
 
-# Sort newest first
-posts_data.sort(key=lambda x: x["date"], reverse=True)
+# Save to posts.json
+with open("posts.json", "w", encoding="utf-8") as f:
+    json.dump(all_posts, f, ensure_ascii=False, indent=4)
 
-# Limit total posts
-posts_data = posts_data[:MAX_TOTAL_POSTS]
-
-with open("posts.json", "w") as f:
-    json.dump(posts_data, f)
-
-print("Finished successfully.")
+print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Fetched posts for {len(ACCOUNTS)} accounts.")
