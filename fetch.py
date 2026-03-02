@@ -25,7 +25,7 @@ ACCOUNTS = [
 
 # Initialize Instaloader and load saved session
 L = instaloader.Instaloader()
-L.load_session_from_file("bat.8797744")  # MUST match your session file name
+L.load_session_from_file("session-bat.8797744")
 
 # Dictionary to store posts
 all_posts = {}
